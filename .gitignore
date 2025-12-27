@@ -1,0 +1,68 @@
+# ---- Environment ----
+# Environment files
+.env
+.env.*
+
+# ---- Dependency directories ----
+# Composer / PHP
+/vendor/
+
+# Node
+/node_modules/
+
+# ---- Laravel / Framework specific ----
+# Laravel storage and compiled files
+/storage/*.key
+/storage/framework/cache/data/
+/bootstrap/cache/*.php
+/public/storage/
+
+# If you keep compiled frontend assets out of VCS
+/public/mix-manifest.json
+/public/hot
+
+# ---- Uploaded files / runtime assets ----
+# Ignore uploads directory (keep folder with a tracked placeholder if needed)
+/uploads/
+
+# ---- Logs, databases, caches ----
+*.log
+*.cache
+*.sql
+*.sqlite
+
+# ---- IDEs and editors ----
+/.idea/
+/.vscode/
+*.sublime-workspace
+*.sublime-project
+
+# ---- OS files ----
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ---- Temp / swap / build artifacts ----
+/.sass-cache/
+.webpack-cache
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ---- Composer PHAR ----
+composer.phar
+
+# ---- Sensitive or local files ----
+# Database credentials, local config
+/config/env.php
+config/koneksi.php
+
+# ---- Optional: keep track of lockfiles if you prefer ----
+# Uncomment to ignore lockfiles (not recommended for apps)
+# composer.lock
+# package-lock.json
+# yarn.lock
+
+# End of .gitignore
+
