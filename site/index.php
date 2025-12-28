@@ -64,7 +64,7 @@ if (!$res) {
 
 <section class="mb-6">
   <h1 class="text-2xl font-bold">Produk Terbaru</h1>
-  <p class="text-slate-600">Cari dan lihat review produk.</p>
+  <p class="text-muted">Cari dan lihat review produk.</p>
 </section>
 
 <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -76,7 +76,7 @@ if (!$res) {
     ?>
 
     <a href="<?= BASE_URL ?>/site/detail.php?id=<?= (int)$row['id'] ?>"
-       class="bg-white rounded-2xl shadow-sm border overflow-hidden hover:shadow-md transition">
+       class="glass-card rounded-2xl overflow-hidden">
 
       <div class="aspect-[16/10] bg-slate-100">
         <img
@@ -89,7 +89,7 @@ if (!$res) {
       </div>
 
       <div class="p-4">
-        <div class="text-xs text-slate-500 mb-1">
+        <div class="meta text-xs mb-1">
           <?= htmlspecialchars($row['category_name'] ?? 'Uncategorized') ?>
           <?= !empty($row['type']) ? " • " . htmlspecialchars($row['type']) : "" ?>
 
@@ -98,17 +98,17 @@ if (!$res) {
           </div>
         </div>
 
-        <div class="font-semibold text-lg leading-snug">
+       <div class="title font-semibold text-lg leading-snug">
           <?= htmlspecialchars($row['title']) ?>
         </div>
 
-        <div class="text-sm text-slate-600 mt-2 line-clamp-2">
+       <div class="desc text-sm mt-2 line-clamp-2">
           <?= htmlspecialchars($row['description'] ?? '') ?>
         </div>
 
         <div class="mt-3 text-sm flex items-center gap-2">
-          <span>⭐ <?= number_format((float)$row['avg_rating'], 1) ?></span>
-          <span class="text-slate-500">(<?= (int)$row['total_reviews'] ?> review)</span>
+        <span class="rating">⭐ <?= number_format((float)$row['avg_rating'], 1) ?></span>
+        <span class="count">(<?= (int)$row['total_reviews'] ?> review)</span>
         </div>
       </div>
     </a>

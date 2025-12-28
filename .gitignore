@@ -60,7 +60,7 @@ config/koneksi.php
 
 /config/env.php
 /config/koneksi.php
-
+/site/action/add_reiew.php
 # ---- Optional: keep track of lockfiles if you prefer ----
 # Uncomment to ignore lockfiles (not recommended for apps)
 # composer.lock
