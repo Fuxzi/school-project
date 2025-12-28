@@ -58,6 +58,9 @@ composer.phar
 /config/env.php
 config/koneksi.php
 
+/config/env.php
+/config/koneksi.php
+
 # ---- Optional: keep track of lockfiles if you prefer ----
 # Uncomment to ignore lockfiles (not recommended for apps)
 # composer.lock

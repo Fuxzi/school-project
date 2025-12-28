@@ -5,6 +5,38 @@ require_once __DIR__ . '/../config/koneksi.php';
 include __DIR__ . '/partials/head.php';
 include __DIR__ . '/partials/navbar.php';
 
+// ✅ Helper: cari file gambar yang bener (png/jpg/jpeg/webp) + aman dari redeclare
+if (!function_exists('resolveImageUrl')) {
+  function resolveImageUrl(string $imgPath): string {
+    $imgPath = trim($imgPath);
+
+    // kosong -> placeholder
+    if ($imgPath === '') {
+      return BASE_URL . '/assets/img/placeholder.png';
+    }
+
+    // cek path sesuai DB
+    $full = BASE_PATH . '/' . ltrim($imgPath, '/');
+    if (file_exists($full)) {
+      return BASE_URL . '/' . ltrim($imgPath, '/');
+    }
+
+    // fallback: coba ekstensi lain
+    $info = pathinfo($imgPath);
+    $dir  = $info['dirname'] ?? '';
+    $name = $info['filename'] ?? '';
+    foreach (['jpg', 'jpeg', 'png', 'webp'] as $ext) {
+      $try = ($dir !== '.' ? $dir . '/' : '') . $name . '.' . $ext;
+      $fullTry = BASE_PATH . '/' . ltrim($try, '/');
+      if (file_exists($fullTry)) {
+        return BASE_URL . '/' . ltrim($try, '/');
+      }
+    }
+
+    return BASE_URL . '/assets/img/placeholder.png';
+  }
+}
+
 // Ambil produk + kategori + ringkasan rating
 $sql = "
   SELECT 
@@ -38,31 +70,32 @@ if (!$res) {
 <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
   <?php while($row = mysqli_fetch_assoc($res)): ?>
     <?php
-      // Kalau image_path kosong / null -> pakai placeholder
-      $imgPath = trim((string)($row['image_path'] ?? ''));
-      $imgUrl = $imgPath !== ''
-        ? BASE_URL . '/' . $imgPath
-        : BASE_URL . '/assets/img/placeholder.png';
+      // ✅ Ambil dari DB, lalu resolve ke file yang bener
+      $imgPath = (string)($row['image_path'] ?? '');
+      $imgUrl  = resolveImageUrl($imgPath);
     ?>
+
     <a href="<?= BASE_URL ?>/site/detail.php?id=<?= (int)$row['id'] ?>"
        class="bg-white rounded-2xl shadow-sm border overflow-hidden hover:shadow-md transition">
 
       <div class="aspect-[16/10] bg-slate-100">
-                <img
-            src="<?= htmlspecialchars($imgUrl) ?>"
-            alt="<?= htmlspecialchars($row['title']) ?>"
-            class="w-full h-full object-cover"
-            loading="lazy"
-            referrerpolicy="no-referrer"
-            onerror="this.onerror=null; this.src='<?= BASE_URL ?>/assets/img/placeholder.png';"
-            />
-
+        <img
+          src="<?= htmlspecialchars($imgUrl) ?>"
+          alt="<?= htmlspecialchars($row['title']) ?>"
+          class="w-full h-full object-cover"
+          loading="lazy"
+          onerror="this.onerror=null; this.src='<?= BASE_URL ?>/assets/img/placeholder.png';"
+        />
       </div>
 
       <div class="p-4">
         <div class="text-xs text-slate-500 mb-1">
           <?= htmlspecialchars($row['category_name'] ?? 'Uncategorized') ?>
           <?= !empty($row['type']) ? " • " . htmlspecialchars($row['type']) : "" ?>
+
+          <div class="mt-2 text-[11px] text-slate-400 break-all">
+            <?= htmlspecialchars($imgUrl) ?>
+          </div>
         </div>
 
         <div class="font-semibold text-lg leading-snug">
