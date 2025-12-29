@@ -1,4 +1,4 @@
-# Langauge and Database
+# Language and Database
 <p align="center">
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg" height="40" alt="PHP">
   &nbsp;&nbsp;
@@ -67,3 +67,21 @@ If the images in the sites is not appearing might be a problem within your PHP v
   * Website is purely focused on **product reviews & opinions**
 
 ---
+# Requirements
+* **Required (must have)**
+
+    * XAMPP (Apache + MySQL + PHP)
+
+    * Database import: your icikiwir_db.sql
+
+* **Correct config:**
+
+    * config/koneksi.php (DB connection)
+
+    * config/env.php (BASE_URL, BASE_PATH, APP_NAME)
+
+    * Folder permissions (usually fine on Windows)
+
+*  **Your assets in:**
+
+    * assets/img/
