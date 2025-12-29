@@ -1,0 +1,58 @@
+name: CI (PHP Lint)
+
+on:
+  push:
+    branches: ["main", "master"]
+  pull_request:
+    branches: ["main", "master"]
+  workflow_dispatch: {}
+
+jobs:
+  php-lint:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php: ["8.1", "8.2", "8.3"]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          tools: none
+          coverage: none
+
+      - name: Show PHP version
+        run: php -v
+
+      - name: PHP syntax check (lint)
+        shell: bash
+        run: |
+          set -e
+          echo "Linting PHP files..."
+          # Find all php files and lint them
+          while IFS= read -r -d '' file; do
+            php -l "$file" > /dev/null
+          done < <(find . -type f -name "*.php" -print0)
+
+      - name: Basic checks (no secrets, no debug dumps)
+        shell: bash
+        run: |
+          set -e
+          echo "Checking for common risky patterns..."
+          # Fail if someone accidentally commits .env with secrets (optional)
+          if ls -1 *.env 2>/dev/null; then
+            echo "Found .env in repo root. Please remove it and use an example file."
+            exit 1
+          fi
+
+          # Warn (do not fail) for var_dump / die usage in non-dev code
+          if grep -RIn --exclude-dir=.git --exclude-dir=.github --exclude=vendor --exclude=node_modules -E "var_dump\(|print_r\(|die\(|dd\(" .; then
+            echo "⚠️ Found debug statements (var_dump/print_r/die/dd). Consider removing before release."
+          else
+            echo "No obvious debug statements found."
+          fi
