@@ -1,0 +1,40 @@
+icikiwir/
+├─ assets/
+│  └─ img/
+│     ├─ placeholder.png
+│     └─ (gambar produk lain...)
+│  
+├─ config/
+│  ├─ env.php
+│  ├─ koneksi.php
+│  └─ auth.php
+│
+├─ auth/
+│  ├─ login.php
+│  ├─ register.php
+│  └─ logout.php
+│
+├─ site/
+│  ├─ index.php
+│  ├─ detail.php
+│  ├─ search.php
+│  ├─ about.php
+│  ├─ contact.php
+│  ├─ profile.php
+│  ├─ settings.php
+│  ├─ my-reviews.php
+│  ├─ edit-review.php
+│  └─ partials/
+│     ├─ head.php
+│     ├─ navbar.php
+│     └─ footer.php
+│
+├─ admin/
+│  ├─ index.php
+│  ├─ products.php
+│  └─ partials/
+│     ├─ head.php
+│     ├─ sidebar.php
+│     └─ footer.php
+│
+└─ icikiwir_db.sql
