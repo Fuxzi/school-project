@@ -75,18 +75,9 @@ $user = $_SESSION['user'] ?? null; // session sudah dimulai dari head/page
             </div>
           </div>
 
-          <div style="padding:12px; display:flex; gap:8px;">
-            <span style="font-size:12px; color:rgba(255,255,255,.85); padding:6px 10px; border-radius:12px; background:rgba(255,255,255,.10); border:1px solid rgba(255,255,255,.12);">
-              🪙 <b>0</b> Coin
-            </span>
-            <span style="font-size:12px; color:rgba(255,255,255,.85); padding:6px 10px; border-radius:12px; background:rgba(255,255,255,.10); border:1px solid rgba(255,255,255,.12);">
-              🎟️ <b>0</b> Kupon
-            </span>
-          </div>
-
           <div style="padding:10px;">
             <a class="dropdown-item" href="<?= BASE_URL ?>/site/profile.php">Profil Saya</a>
-            <a class="dropdown-item" href="<?= BASE_URL ?>/site/orders.php">Riwayat Pembelian</a>
+            <a class="dropdown-item" href="<?= BASE_URL ?>/site/my-reviews.php">Review Saya</a>
             <a class="dropdown-item" href="<?= BASE_URL ?>/site/settings.php">Pengaturan</a>
 
             <?php if (($user['role'] ?? '') === 'admin'): ?>
