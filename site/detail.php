@@ -68,7 +68,7 @@ $sqlReviews = "
   ORDER BY COALESCE(c.created_at, r.created_at) DESC
 ";
 $resR = mysqli_query($conn, $sqlReviews);
-$resR = mysqli_query($conn, $sqlReviews);
+
 if (!$resR) die("Query error: " . mysqli_error($conn));
 
 function stars($rating) {
