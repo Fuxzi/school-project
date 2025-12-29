@@ -17,6 +17,8 @@ a full php native websites group projects that we made for my school project tha
 
 # Common Problems
 If the images in the sites is not appearing might be a problem within your PHP version or XAMPP version
+  * PHP 8.0+
+  * XAMPP 3.0+
 
 # ✨ Additional Features
 ---
