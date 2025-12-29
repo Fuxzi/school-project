@@ -84,6 +84,7 @@ require_once __DIR__ . '/../../config/env.php';
 
     a{ color: inherit; }
   </style>
+  
   <style>
   /* Card content readability */
   .glass-card .meta { color: rgba(226,232,240,.78) !important; }      /* kategori/type */
@@ -94,6 +95,55 @@ require_once __DIR__ . '/../../config/env.php';
 
   /* Optional: card sedikit lebih terang biar teks kebaca */
   :root{ --card-bg: rgba(15,23,42,.78); }
+</style>
+<style>
+  /* helper dropdown hover */
+  .dropdown { position: relative; }
+  .dropdown-panel{
+    position:absolute;
+    right:0;
+    top:calc(100% + 10px);
+    min-width:280px;
+    opacity:0;
+    visibility:hidden;
+    transform:translateY(-8px);
+    transition:160ms ease;
+    z-index:60;
+  }
+  .dropdown:hover .dropdown-panel,
+  .dropdown:focus-within .dropdown-panel{
+    opacity:1;
+    visibility:visible;
+    transform:translateY(0);
+  }
+
+  /* biar mirip tema glass kamu */
+  .dropdown-glass{
+    background: rgba(10, 18, 35, 0.92);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.12);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.35);
+    border-radius: 18px;
+    overflow:hidden;
+  }
+  .dropdown-item{
+    display:block;
+    padding:10px 12px;
+    border-radius:12px;
+    color: rgba(255,255,255,0.82);
+    text-decoration:none;
+    transition: .15s ease;
+  }
+  .dropdown-item:hover{
+    background: rgba(255,255,255,0.10);
+    color:#fff;
+  }
+  .dropdown-divider{
+    height:1px;
+    background: rgba(255,255,255,0.10);
+    margin:8px 0;
+  }
 </style>
 
 </head>
