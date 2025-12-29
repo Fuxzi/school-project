@@ -1,6 +1,7 @@
 # school-project
-STILL WIP 😛
-Big Credits to my Boy Projects for The Resources they give to me 
-https://github.com/MaulanaAhmadSulami
+a Scholl Project of my Web Developing
+Credits : https://github.com/MaulanaAhmadSulami (Reources, Images, etc)
 
-How to install : git clone https://github.com/Fuxzi/school-project.git
+How To Install : git clone https://github.com/Fuxzi/school-project.git
+
+a full php native websites i made for my school project.

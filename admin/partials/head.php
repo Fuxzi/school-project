@@ -116,6 +116,79 @@ require_admin();
       border:1px solid rgba(255,255,255,.12);
       background: rgba(255,255,255,.06);
     }
+    /* ===== Form Admin (nyatu sama glass) ===== */
+.form-admin{
+  display:grid;
+  gap:12px;
+}
+
+.form-admin label{
+  font-size:12px;
+  color:var(--muted);
+  margin-bottom:4px;
+}
+
+.form-admin input,
+.form-admin select,
+.form-admin textarea{
+  width:100%;
+  padding:10px 14px;
+  border-radius:14px;
+  background: rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.12);
+  color:var(--text);
+  outline:none;
+}
+
+.form-admin input::placeholder,
+.form-admin textarea::placeholder{
+  color:rgba(255,255,255,.45);
+}
+
+.form-admin input:focus,
+.form-admin select:focus,
+.form-admin textarea:focus{
+  border-color: rgba(59,130,246,.7);
+  box-shadow: 0 0 0 2px rgba(59,130,246,.25);
+}
+
+.form-row-2{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+@media(max-width:720px){
+  .form-row-2{grid-template-columns:1fr}
+}
+
+/* button primary versi theme */
+.btn-primary{
+  background: linear-gradient(135deg,#2563eb,#1d4ed8);
+  border:1px solid rgba(255,255,255,.12);
+  color:#fff;
+}
+.btn-primary:hover{
+  filter:brightness(1.1);
+}
+
+/* image thumb konsisten */
+.img-thumb{
+  width:42px;
+  height:42px;
+  border-radius:10px;
+  object-fit:cover;
+  background: rgba(255,255,255,.08);
+}
+select {
+  color-scheme: dark;
+}
+
+select option {
+  background-color: #fff;
+  color: #000;
+}
+
   </style>
 </head>
 <body>

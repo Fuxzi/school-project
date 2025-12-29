@@ -268,8 +268,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <button class="btn" type="submit">Masuk</button>
 
         <div class="links">
-          <a href="<?= BASE_URL ?>/site/">Home</a>
-          <a href="<?= BASE_URL ?>/site/contact.php">Butuh bantuan?</a>
+          <div class="links">
+            <a href="<?= BASE_URL ?>/site/">Home</a>
+            <a href="<?= BASE_URL ?>/auth/register.php">Daftar</a>
+          </div>
         </div>
       </form>
     </section>
