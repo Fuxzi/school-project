@@ -63,6 +63,16 @@ $user = $_SESSION['user'] ?? null; // session sudah dimulai dari head/page
         </span>
         <span class="text-white/50">▾</span>
       </button>
+      <?php if (($user['role'] ?? '') === 'admin'): ?>
+        <span style="
+          font-size:11px;
+          padding:2px 8px;
+          border-radius:999px;
+          background:rgba(59,130,246,.18);
+          border:1px solid rgba(59,130,246,.35);
+          margin-left:6px;
+        ">Admin</span>
+      <?php endif; ?>
 
       <div class="dropdown-panel">
         <div class="dropdown-glass">
@@ -83,7 +93,7 @@ $user = $_SESSION['user'] ?? null; // session sudah dimulai dari head/page
             <?php if (($user['role'] ?? '') === 'admin'): ?>
               <a class="dropdown-item" href="<?= BASE_URL ?>/admin/">Admin Panel</a>
             <?php endif; ?>
-
+            
             <div class="dropdown-divider"></div>
 
             <!-- Logout dibuat tombol biar "keren" -->
