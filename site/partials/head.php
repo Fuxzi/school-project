@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/../../config/env.php';
+if (session_status() === PHP_SESSION_NONE) session_start();
 ?>
+
 <!doctype html>
 <html lang="id">
 <head>
@@ -96,6 +98,18 @@ require_once __DIR__ . '/../../config/env.php';
   /* Optional: card sedikit lebih terang biar teks kebaca */
   :root{ --card-bg: rgba(15,23,42,.78); }
 </style>
+<style>
+  .btn-primary{
+    transition: transform .12s ease, filter .12s ease, box-shadow .12s ease;
+    box-shadow: 0 12px 35px rgba(236,72,153,.18);
+  }
+  .btn-primary:hover{
+    transform: translateY(-1px);
+    filter: brightness(1.03);
+    box-shadow: 0 16px 45px rgba(236,72,153,.24);
+  }
+</style>
+
 <style>
   /* helper dropdown hover */
   .dropdown { position: relative; }
