@@ -5,12 +5,18 @@ require_once __DIR__ . '/../config/koneksi.php';
 include __DIR__ . '/partials/head.php';
 include __DIR__ . '/partials/navbar.php';
 
+if (session_status() === PHP_SESSION_NONE) session_start();
+$user = $_SESSION['user'] ?? null;
+
 if (!function_exists('resolveImageUrl')) {
   function resolveImageUrl(string $imgPath): string {
     $imgPath = trim($imgPath);
     if ($imgPath === '') return BASE_URL . '/assets/img/placeholder.png';
 
-    $full = BASE_PATH . '/' . ltrim($imgPath, '/');
+    // BASE_PATH kadang belum ada, fallback ke parent folder
+    $basePath = defined('BASE_PATH') ? BASE_PATH : realpath(__DIR__ . '/..');
+
+    $full = $basePath . '/' . ltrim($imgPath, '/');
     if (file_exists($full)) return BASE_URL . '/' . ltrim($imgPath, '/');
 
     $info = pathinfo($imgPath);
@@ -18,7 +24,7 @@ if (!function_exists('resolveImageUrl')) {
     $name = $info['filename'] ?? '';
     foreach (['jpg','jpeg','png','webp'] as $ext) {
       $try = ($dir !== '.' ? $dir . '/' : '') . $name . '.' . $ext;
-      if (file_exists(BASE_PATH . '/' . ltrim($try, '/'))) {
+      if (file_exists($basePath . '/' . ltrim($try, '/'))) {
         return BASE_URL . '/' . ltrim($try, '/');
       }
     }
@@ -26,10 +32,14 @@ if (!function_exists('resolveImageUrl')) {
   }
 }
 
-$id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
-if ($id <= 0) {
-  die("Produk tidak ditemukan.");
+function stars($rating): string {
+  $r = (float)$rating;
+  $full = (int)floor($r);
+  return str_repeat("★", $full) . str_repeat("☆", 5 - $full);
 }
+
+$id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+if ($id <= 0) die("Produk tidak ditemukan.");
 
 /* Produk + kategori + ringkasan rating */
 $sqlProduct = "
@@ -52,31 +62,26 @@ if (!$product) die("Produk tidak ditemukan.");
 
 $imgUrl = resolveImageUrl((string)($product['image_path'] ?? ''));
 
-/* List review + comment */
+/* List review + comment + user */
 $sqlReviews = "
   SELECT
     r.id AS review_id,
     r.rating,
     r.created_at AS review_created_at,
+
     c.comment_text,
     c.created_at AS comment_created_at,
-    u.username
+
+    u.username,
+    u.full_name
   FROM reviews r
   LEFT JOIN comments c ON c.review_id = r.id
-  LEFT JOIN users u ON u.id = c.user_id
+  JOIN users u ON u.id = r.user_id
   WHERE r.product_id = $id
-  ORDER BY COALESCE(c.created_at, r.created_at) DESC
+  ORDER BY r.created_at DESC
 ";
 $resR = mysqli_query($conn, $sqlReviews);
-
 if (!$resR) die("Query error: " . mysqli_error($conn));
-
-function stars($rating) {
-  $r = (float)$rating;
-  $full = (int)floor($r);
-  $out = str_repeat("★", $full) . str_repeat("☆", 5-$full);
-  return $out;
-}
 ?>
 
 <!-- Breadcrumb -->
@@ -91,7 +96,7 @@ function stars($rating) {
     <div class="aspect-[16/10] bg-black/20">
       <img
         src="<?= htmlspecialchars($imgUrl) ?>"
-        alt="<?= htmlspecialchars($product['title']) ?>"
+        alt="<?= htmlspecialchars((string)$product['title']) ?>"
         class="w-full h-full object-cover"
         loading="lazy"
         onerror="this.onerror=null; this.src='<?= BASE_URL ?>/assets/img/placeholder.png';"
@@ -100,12 +105,12 @@ function stars($rating) {
 
     <div class="p-5">
       <div class="meta text-xs mb-2">
-        <?= htmlspecialchars($product['category_name'] ?? 'Uncategorized') ?>
-        <?= !empty($product['type']) ? " • " . htmlspecialchars($product['type']) : "" ?>
+        <?= htmlspecialchars((string)($product['category_name'] ?? 'Uncategorized')) ?>
+        <?= !empty($product['type']) ? " • " . htmlspecialchars((string)$product['type']) : "" ?>
       </div>
 
       <h1 class="title text-2xl font-extrabold">
-        <?= htmlspecialchars($product['title']) ?>
+        <?= htmlspecialchars((string)$product['title']) ?>
       </h1>
 
       <p class="desc mt-3 leading-relaxed">
@@ -149,13 +154,18 @@ function stars($rating) {
       <h2 class="text-lg font-bold text-white/90">Tambah Review</h2>
       <p class="text-white/60 text-sm mt-1">Isi rating dan komentar kamu.</p>
 
+      <?php if (!$user): ?>
+        <div class="mt-4 p-3 rounded-xl bg-white/5 ring-1 ring-white/10 text-white/70 text-sm">
+          Kamu harus <a class="text-white underline" href="<?= BASE_URL ?>/auth/login.php">login</a> untuk mengirim review.
+        </div>
+      <?php endif; ?>
+
       <form action="<?= BASE_URL ?>/site/actions/add_review.php" method="POST" class="mt-4 space-y-3">
         <input type="hidden" name="product_id" value="<?= (int)$product['id'] ?>">
 
-        <!-- rating -->
         <div>
           <label class="block text-sm text-white/80 mb-1">Rating (1-5)</label>
-          <select name="rating" class="input-glass rounded-lg px-3 py-2 w-full" required>
+          <select name="rating" class="input-glass rounded-lg px-3 py-2 w-full" required <?= !$user ? 'disabled' : '' ?>>
             <option value="" disabled selected>Pilih rating</option>
             <option value="5">5 - Mantap</option>
             <option value="4">4 - Bagus</option>
@@ -165,15 +175,18 @@ function stars($rating) {
           </select>
         </div>
 
-        <!-- comment -->
         <div>
           <label class="block text-sm text-white/80 mb-1">Komentar</label>
-          <textarea name="comment" rows="4" class="input-glass rounded-lg px-3 py-2 w-full" placeholder="Tulis komentar..." required></textarea>
+          <textarea name="comment" rows="4" class="input-glass rounded-lg px-3 py-2 w-full"
+                    placeholder="Tulis komentar..." required <?= !$user ? 'disabled' : '' ?>></textarea>
         </div>
 
-        <button class="btn-primary w-full rounded-lg px-4 py-2">
-          Kirim Review
-        </button>
+        <?php if ($user): ?>
+          <button class="btn-primary w-full rounded-lg px-4 py-2">Kirim Review</button>
+        <?php else: ?>
+          <a class="btn-primary block text-center w-full rounded-lg px-4 py-2"
+             href="<?= BASE_URL ?>/auth/login.php">Login untuk Review</a>
+        <?php endif; ?>
       </form>
     </div>
 
@@ -189,34 +202,43 @@ function stars($rating) {
     </div>
   </div>
 
-  <?php while($r = mysqli_fetch_assoc($resR)): ?>
-  <div class="glass-card rounded-2xl p-5">
-    <div class="flex items-center justify-between">
-      <div class="text-yellow-300 text-sm">
-        <?= stars((int)($r['rating'] ?? 0)) ?>
+  <?php if ($resR && mysqli_num_rows($resR) > 0): ?>
+    <?php while ($r = mysqli_fetch_assoc($resR)): ?>
+      <?php
+        $displayName = trim((string)($r['full_name'] ?? ''));
+        if ($displayName === '') $displayName = (string)($r['username'] ?? 'user');
+
+        $rawDate = $r['comment_created_at'] ?? $r['review_created_at'] ?? '';
+        $niceDate = $rawDate ? date('d M Y H:i', strtotime($rawDate)) : '';
+      ?>
+      <div class="glass-card rounded-2xl p-5 mb-4">
+        <div class="flex items-center justify-between">
+          <div class="text-yellow-300 text-sm">
+            <?= stars((int)($r['rating'] ?? 0)) ?>
+          </div>
+          <div class="text-white/50 text-xs">
+            <?= htmlspecialchars($niceDate) ?>
+          </div>
+        </div>
+
+        <div class="mt-2 text-white/70 text-xs">
+          oleh <span class="text-white/85 font-semibold"><?= htmlspecialchars($displayName) ?></span>
+        </div>
+
+        <div class="mt-3 text-white/85 leading-relaxed">
+          <?php if (!empty($r['comment_text'])): ?>
+            <?= nl2br(htmlspecialchars((string)$r['comment_text'])) ?>
+          <?php else: ?>
+            <span class="text-white/50">Belum ada komentar.</span>
+          <?php endif; ?>
+        </div>
       </div>
-      <div class="text-white/50 text-xs">
-        <?= htmlspecialchars((string)($r['comment_created_at'] ?? $r['review_created_at'] ?? '')) ?>
-      </div>
+    <?php endwhile; ?>
+  <?php else: ?>
+    <div class="glass-card rounded-2xl p-5 text-white/70">
+      Belum ada review untuk produk ini.
     </div>
-
-    <?php if (!empty($r['username'])): ?>
-      <div class="mt-2 text-white/70 text-xs">
-        oleh <span class="text-white/85 font-semibold"><?= htmlspecialchars($r['username']) ?></span>
-      </div>
-    <?php endif; ?>
-
-    <div class="mt-3 text-white/85 leading-relaxed">
-      <?php if (!empty($r['comment_text'])): ?>
-        <?= nl2br(htmlspecialchars((string)$r['comment_text'])) ?>
-      <?php else: ?>
-        <span class="text-white/50">Belum ada komentar.</span>
-      <?php endif; ?>
-    </div>
-  </div>
-<?php endwhile; ?>
-
+  <?php endif; ?>
 </section>
 
-<?php
-include __DIR__ . '/partials/footer.php';
+<?php include __DIR__ . '/partials/footer.php'; ?>
