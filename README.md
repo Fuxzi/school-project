@@ -17,11 +17,6 @@ a full php native websites group projects that we made for my school project tha
 # Common Problems
 If the images in the sites is not appearing might be a problem within your PHP version or XAMPP version
 
-# Here’s a clean **“Additional Features” summary** you can drop straight into your `README.md`.
-It’s written to match your project (review-focused, non-ecommerce).
-
-
-
 # ✨ Additional Features
 ---
 * **User Authentication**
