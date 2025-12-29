@@ -28,8 +28,6 @@
 # ---- Logs, databases, caches ----
 *.log
 *.cache
-*.sql
-*.sqlite
 
 # ---- IDEs and editors ----
 /.idea/
