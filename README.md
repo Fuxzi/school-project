@@ -1,22 +1,27 @@
-# Language and Database
+# 📍 Language and Database
 <p align="center">
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg" height="40" alt="PHP">
   &nbsp;&nbsp;
   <img src="https://upload.wikimedia.org/wikipedia/commons/0/03/Xampp_logo.svg" height="40" alt="XAMPP">
 </p>
 
-# school-project
+# 📚 school-project (Icikiwir) 
 a Scholl Project of my Web Developing
 
-Credits : https://github.com/MaulanaAhmadSulami (Resources, Images, etc)
+🌟 Credits : https://github.com/MaulanaAhmadSulami (Resources, Images, etc)
 
 ```bash
-How To Install : git clone https://github.com/Fuxzi/school-project.git
+How To Install :
+git clone https://github.com/Fuxzi/school-project.git
 ```
-a full php native websites group projects that we made for my school project that Me (Fahri Ilham) and 2 of my Friend group (Reihan and Ilham) made about Tech Reviews that mainly in gaming sector.
+```
+Import the database to yours
+```
+a full php native websites group project that we created for my school project that Me (Fahri Ilham) and 2 of my Friend group (Reihan and Ilham) made about Tech Reviews that mainly in gaming sector.
 
-# Common Problems
-If the images in the sites is not appearing might be a problem within your PHP version or XAMPP version
+# 🛠 Common Problems and Fix
+• Login problems? check the database in users table, if it doesnt have any users yet i've prepared it in tools folder
+• If the images in the sites is not appearing might be a problem within your PHP version or XAMPP version
   * PHP 8.0+
   * XAMPP 3.0+
 
