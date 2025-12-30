@@ -75,7 +75,7 @@ a full php native websites group project that we created for my school project t
   * Website is purely focused on **product reviews & opinions**
 
 ---
-# Requirements
+# ❗Requirements❗
 * **Required (must have)**
 
     * XAMPP (Apache + MySQL + PHP)
